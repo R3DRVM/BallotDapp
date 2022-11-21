@@ -1,6 +1,12 @@
 import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { ethers } from 'ethers';
-import { AppService } from './app.service';
+import { Address } from 'cluster';
+import { AppService, mintedTokens, voteHistory } from './app.service';
+
+export class mintingDto {
+  address: string;
+  amount: string;
+}
 
 @Controller()
 export class AppController {
@@ -12,9 +18,9 @@ export class AppController {
   }
 
   @Post('request-tokens')
-  requestTokens(@Body() body) {
-    return { result: this.appService.requestTokens(body)};
-  }
+  async requestTokens(@Body() body: mintingDto): Promise<any> {
+    return await this.appService.requestTokens(body);
+  }  
   
   @Post('delegate-votes')
   delegateVotes(@Body() body) {
